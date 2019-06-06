@@ -3,6 +3,7 @@
 database engine
 """
 import models
+from sqlalchemy import inspect
 from models.user import User
 from models.base_model import Base
 from sqlalchemy import create_engine, MetaData
@@ -33,7 +34,7 @@ class DBstorage:
                 cls_name = one_obj.__class__.__name__
                 k = cls_name + '.' + one_obj.id
                 dict_all[k] = one_obj
-        print(dict_all)
+        return(dict_all)
 
     def reload(self):
         """creates all tables in database"""
@@ -53,19 +54,15 @@ class DBstorage:
         """
         self.__session.commit()
 
-    def delete(self, cls, code):
+    def delete(self, cls, obj_id):
         """
         deletes obj from the current database session
         """
-        if cls.__name__ in DBstorage.all_classes.keys():
-            obj = DBstorage.all_classes[cls.__name__]
-
-        else:
-            return 1
-
-        user = self.__session.query(obj).filter(obj.id == str(code)).one()
-        self.__session.delete(user)
-        self.__session.commit()
+        if cls in DBstorage.all_classes.keys():
+            obj = DBstorage.all_classes[cls]
+            user = self.__session.query(obj).filter(obj.id == obj_id).one()
+            self.__session.delete(user)
+            self.__session.commit()
 
     def close(self):
         """
