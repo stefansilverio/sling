@@ -4,14 +4,14 @@ unit tests for base_model class
 """
 from datetime import datetime
 import inspect
-import json
 import unittest
 import models
 from models.base_model import BaseModel
+from models.user import User
 
 class TestBaseModel(unittest.TestCase):
     """
-    this will test the base_model class
+    this will test the BaseModel class
     """
 
     @classmethod
@@ -20,6 +20,7 @@ class TestBaseModel(unittest.TestCase):
         drop all tables in db
         create new session
         """
+        models.storage.close()
         models.storage.drop_all()
         models.storage.reload()
 
@@ -49,6 +50,18 @@ class TestBaseModel(unittest.TestCase):
         obj_dict = new_base_model.all()
         self.assertEqual(len(obj_dict), 0)
         self.assertIsInstance(new_base_model.all(), dict)
+
+    def test_save_method(self):
+        """
+        check that obj gets written to db
+        """
+        pass
+
+    def test_delete_method(self):
+        """
+        check that delete method can delete obj from db
+        """
+        pass
 
 if __name__ == "__main__":
     unittest.main()
