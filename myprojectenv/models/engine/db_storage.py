@@ -72,3 +72,15 @@ class DBstorage:
         close self.__session Session object
         """
         self.__session.close()
+
+    def drop_all(self):
+        """
+        drop all tables
+        """
+        Base.metadata.drop_all(self.__engine)
+
+    def update(self):
+        """
+        update User, Lender, and Borrower information
+        """
+        pass
