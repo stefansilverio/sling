@@ -36,26 +36,28 @@ class BaseModel:
 
         if kwargs:
             for key, value in kwargs.items():
-                if key is "password":
-                    secure_password = self.__set_password(kwargs['password'])
-                    setattr(self, key, secure_password)
+                if key is "password" or key is "email":
+                    encrypted = self.__set_password(kwargs[key])
+                    setattr(self, key, encrypted)
                 else:
                     setattr(self, key, value)
 
-    def __set_password(self, pwd):
+    def __set_password(self, data):
         """
         encrypt user password w/ MD5
         """
         secure = hashlib.md5()
-        secure.update(pwd.encode("utf-8"))
-        secure_password = secure.hexdigest()
-        return secure_password
+        secure.update(data.encode("utf-8"))
+        encrypted = secure.hexdigest()
+        return encrypted
 
     def all(self):
         """
         return dict of all objs in db
+        currently printing dictionary
         """
-        models.storage.all()
+        obj = models.storage.all()
+        return obj
 
     def save(self):
         """
@@ -64,11 +66,12 @@ class BaseModel:
         models.storage.new(self)
         models.storage.save()
 
-    def delete(self, cls, code):
+    def delete(self, cls, u_id):
         """
         delete obj from db
         """
-        models.storage.delete(cls, str(code))
+        cls = cls.__name__
+        models.storage.delete(cls, str(u_id))
 
     def close(self):
         """
