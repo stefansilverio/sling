@@ -4,6 +4,7 @@ base_model class to be inherited by all models
 """
 import models
 from uuid import uuid4
+import hashlib
 import sqlalchemy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Float, DateTime
@@ -35,7 +36,20 @@ class BaseModel:
 
         if kwargs:
             for key, value in kwargs.items():
-                setattr(self, key, value)
+                if key is "password":
+                    secure_password = self.__set_password(kwargs['password'])
+                    setattr(self, key, secure_password)
+                else:
+                    setattr(self, key, value)
+
+    def __set_password(self, pwd):
+        """
+        encrypt user password w/ MD5
+        """
+        secure = hashlib.md5()
+        secure.update(pwd.encode("utf-8"))
+        secure_password = secure.hexdigest()
+        return secure_password
 
     def all(self):
         """
@@ -61,3 +75,9 @@ class BaseModel:
         close session, empty pool
         """
         models.storage.close()
+
+    def drop_all(self):
+        """
+        drop all tables
+        """
+        models.storage.drop_all()
