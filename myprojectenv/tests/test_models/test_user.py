@@ -89,6 +89,20 @@ class TestBaseModel(unittest.TestCase):
         new_u.delete(User, new_u.id)
         self.assertEqual(len(new_u.all()), 1)
 
+    def test_update_method(self):
+        """
+        check update method can update values in db
+        check password and email get encrypted
+        """
+        new_u = User(email="silver", password="silver", amount_borrowed=40,
+                     amount_lent=30, first_name="joe", last_name="roberts")
+
+        """check attrs are getting written and pw hashed"""
+        self.assertNotEqual(new_u.email, "silver")
+
+        """
+        need a way to query db and check that values changed to test this
+        """
 
 if __name__ == "__main__":
     unittest.main()
