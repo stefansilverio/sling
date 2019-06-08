@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 """This is the user class"""
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, Integer
+from models.borrower import Borrower
+from models.lender import Lender
+from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
 class User(BaseModel, Base):
