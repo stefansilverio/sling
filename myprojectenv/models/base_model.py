@@ -51,6 +51,18 @@ class BaseModel:
         encrypted = secure.hexdigest()
         return encrypted
 
+    def update(self, *args, **kwargs):
+        """
+        update obj values in db
+        pass in cls, id, and attr key-values
+        encrypt password and email
+        """
+        if kwargs:
+            for k, v in kwargs.items():
+                if k is 'password' or k is 'email':
+                    kwargs[k] = self.__set_password(v)
+            models.storage.update(*args, **kwargs)
+
     def all(self):
         """
         return dict of all objs in db
@@ -72,6 +84,12 @@ class BaseModel:
         """
         cls = cls.__name__
         models.storage.delete(cls, str(u_id))
+
+    def query(self, table):
+        """
+        view all borrowers or lenders in db
+        """
+        return models.storage.query(table)
 
     def close(self):
         """
