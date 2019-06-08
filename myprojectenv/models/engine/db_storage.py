@@ -5,7 +5,10 @@ database engine
 import models
 from sqlalchemy import inspect
 from models.user import User
+from models.borrower import Borrower
+from models.lender import Lender
 from models.base_model import Base
+from sqlalchemy import table, update
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker, scoped_session
 
@@ -14,7 +17,7 @@ class DBstorage:
     handles storge of user information
     """
 
-    all_classes = {'User': User}
+    all_classes = {'User': User, 'Borrower': Borrower, 'Lender': Lender}
 
     def __init__(self):
         """
@@ -76,8 +79,32 @@ class DBstorage:
         """
         Base.metadata.drop_all(self.__engine)
 
-    def update(self):
+    def update(self, *args, **kwargs):
         """
         update User, Lender, and Borrower information
         """
-        pass
+        if args[0].__name__ in DBstorage.all_classes.keys():
+            obj = DBstorage.all_classes[args[0].__name__]
+            user = self.__session.query(obj).filter(obj.id == args[1]).\
+                   update({obj.last_name: kwargs.get('last_name'),
+                           obj.first_name: kwargs.get('first_name'),
+                           obj.amount_borrowed: kwargs.get('amount_borrowed'),
+                           obj.amount_lent: kwargs.get('amount_lent'),
+                           obj.password: kwargs.get('password'),
+                           obj.email: kwargs.get('email')}, synchronize_session = False)
+            self.__session.commit()
+
+    def query(self, cls):
+        """
+        view all borrowers or lenders in db
+        """
+        if cls in DBstorage.all_classes.keys():
+            table = DBstorage.all_classes[cls]
+            all_objs = self.__session.query(table).all()
+            return all_objs
+
+    def rollback(self):
+        """
+        issue Session.rollback()
+        """
+        self.__session.rollback()
