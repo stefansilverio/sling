@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/landing.css') }}">
+{% endblock %}
+
+{% block content %}
+
+  <div id="card-1" class="card card-rotating text-center flipped">
+
+    <!-- Front Side -->
+    <div class="face front">
+
+      <!-- Avatar -->
+      <div class="avatar-git mx-auto white"><img src="https://media.licdn.com/dms/image/C5603AQGJ_Tntgmf6dw/profile-displayphoto-shrink_800_800/0?e=1565827200&v=beta&t=ip7nSyEIsqo9RFeU8-2pq36IxNUtK1xPsFXiWv9bXlw" class="rounded-circle img" alt="Sample user image.">
+      </div>
+
+      <!-- Content -->
+      <div class="card-body">
+          <h4 class="font-weight-bold mb-3"> Stefan Silverio </h4>
+        <p class="font-weight-bold blue-text">Outstanding Balance: 50</p>
+    <i class="fas fa-presription-bottle-alt"></i>
+    <!-- Triggering button -->
+      <a class="rotate-btn" data-card="card-1"><i class="fas fa-redo-alt"></i> Click here to see your outstanding balance</a>
+    </div>
+      </div>
+    </div>
+    <!-- Front Side -->
+
+    <!-- Back Side -->
+
+{% endblock %}
