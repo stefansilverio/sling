@@ -51,17 +51,6 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(len(obj_dict), 0)
         self.assertIsInstance(new_base_model.all(), dict)
 
-    def test_save_method(self):
-        """
-        check that obj gets written to db
-        """
-        pass
-
-    def test_delete_method(self):
-        """
-        check that delete method can delete obj from db
-        """
-        pass
 
 if __name__ == "__main__":
     unittest.main()
