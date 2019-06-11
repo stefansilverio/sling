@@ -11,8 +11,7 @@
     <div class="sign-in">
       <form method="post" class="form-signin">
         <label for="username" class="sr-only"><b>Username</b></label>
-        <input class="form-control" placeholder="Username" name="username" required>
-
+        <input class="form-control" placeholder="Email" name="username" value="{{request.form.email }}"required>
         <label for="password" class="sr-only"><b>Password</b></label>
         <input type="password" class="form-control" placeholder="Password" name="password" required>
 
@@ -24,6 +23,5 @@
 
 
 {% block script %}
-  <script type="text/javascript" src="{{ url_for('static', filename='scripts/auth.js') }}"></script>
 
 {% endblock %}
