@@ -13,6 +13,8 @@ from datetime import datetime
 
 Base = declarative_base()
 
+time = "%Y-%m-%dT%H:%M:%S.%f"
+
 class BaseModel:
     """
     BaseModel class for all other classes
@@ -36,7 +38,7 @@ class BaseModel:
 
         if kwargs:
             for key, value in kwargs.items():
-                if key is "password" or key is "email":
+                if key is "password":
                     encrypted = self.__set_password(kwargs[key])
                     setattr(self, key, encrypted)
                 else:
@@ -59,7 +61,7 @@ class BaseModel:
         """
         if kwargs:
             for k, v in kwargs.items():
-                if k is 'password' or k is 'email':
+                if k is 'password':
                     kwargs[k] = self.__set_password(v)
             models.storage.update(*args, **kwargs)
 
@@ -102,3 +104,15 @@ class BaseModel:
         drop all tables
         """
         models.storage.drop_all()
+
+    def to_dict(self):
+        """creates dictionary of the class and returns
+        Return:
+            returns a dictionary of all the key values in __dict__
+        """
+        my_dict = dict(self.__dict__)
+        print(my_dict)
+        my_dict["created_at"] = my_dict["created_at"].strftime(time)
+        if '_sa_instance_state' in my_dict.keys():
+            del my_dict['_sa_instance_state']
+        return my_dict
