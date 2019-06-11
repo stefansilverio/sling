@@ -3,6 +3,8 @@
 database engine
 """
 import models
+import MySQLdb
+import json
 from sqlalchemy import inspect
 from models.user import User
 from models.borrower import Borrower
@@ -35,7 +37,7 @@ class DBstorage:
             type_obj = self.__session.query(table)
             for one_obj in type_obj:
                 cls_name = one_obj.__class__.__name__
-                k = cls_name + '.' + one_obj.id
+                k = one_obj.email
                 dict_all[k] = one_obj
         return(dict_all)
 
@@ -43,7 +45,7 @@ class DBstorage:
         """creates all tables in database"""
         Base.metadata.create_all(self.__engine)
         reloaded_sesh = sessionmaker(
-            bind=self.__engine, expire_on_commit=False)
+            bind=self.__engine, expire_on_commit=True)
         Session = scoped_session(reloaded_sesh)
         self.__session = Session()
 
@@ -108,3 +110,12 @@ class DBstorage:
         issue Session.rollback()
         """
         self.__session.rollback()
+
+    def clean(self):
+        """
+        delete everything from db
+        """
+        conn = MySQLdb.connect(host="localhost", user="sling", passwd="s", db="sling")
+        cur = conn.cursor()
+        cur.execute("DELETE FROM users;")
+        conn.commit()
