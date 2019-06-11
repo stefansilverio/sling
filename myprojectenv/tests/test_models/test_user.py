@@ -4,6 +4,7 @@ unit tests for user class
 """
 import unittest
 import models
+import MySQLdb
 from datetime import datetime
 from models.user import User
 from sqlalchemy import inspect
@@ -23,6 +24,14 @@ class TestBaseModel(unittest.TestCase):
         models.storage.close()
         models.storage.drop_all()
         models.storage.reload()
+
+    @classmethod
+    def tearDown(cls):
+        """
+        clean db
+        """
+        models.storage.clean()
+
 
     def test_create_user_no_kwargs(self):
         """
@@ -79,30 +88,64 @@ class TestBaseModel(unittest.TestCase):
         models.storage.save()
         self.assertTrue(state.persistent)
 
+
     def test_delete_method(self):
         """
         check delete method can delete from db
         """
         new_u = User(email="silver", password="stef", amount_borrowed=40, amount_lent=30)
         new_u.save()
-        self.assertEqual(len(new_u.all()), 2)
-        new_u.delete(User, new_u.id)
         self.assertEqual(len(new_u.all()), 1)
+        new_u.delete(User, new_u.id)
+        self.assertEqual(len(new_u.all()), 0)
+
+
+    def test_query_method(self):
+        new_u = User(email="silver", password="stef", amount_borrowed=40, amount_lent=30)
+        new_u.save()
+        dic = new_u.query("User")
+        self.assertEqual(len(dic), 1)
+
 
     def test_update_method(self):
         """
         check update method can update values in db
         check password and email get encrypted
         """
+        db = MySQLdb.connect(host="localhost", user="sling", passwd="s", db="sling")
+        cur = db.cursor()
+        cur.execute("select * from users;")
+
+        """test row count"""
+        self.assertEqual(cur.rowcount, 0)
+
         new_u = User(email="silver", password="silver", amount_borrowed=40,
                      amount_lent=30, first_name="joe", last_name="roberts")
 
-        """check attrs are getting written and pw hashed"""
-        self.assertNotEqual(new_u.email, "silver")
+        new_u.save()
 
-        """
-        need a way to query db and check that values changed to test this
-        """
+        db = MySQLdb.connect(host="localhost", user="sling", passwd="s", db="sling")
+        cur = db.cursor()
+        cur.execute("select * from users;")
+
+        """test row count changed"""
+        self.assertEqual(cur.rowcount, 1)
+        """test attr gets written to db"""
+        for tup in cur.__dict__['_rows']:
+            if 'joe' in tup:
+                self.assertIn('joe', tup)
+
+        new_u.update(User, new_u.id, email="silver@", password="williams", first_name="silver", last_name="silver", amount_borrowed=50, amount_lent=40)
+
+        db = MySQLdb.connect(host="localhost", user="sling", passwd="s", db="sling")
+        cur = db.cursor()
+        cur.execute("select * from users;")
+
+        self.assertEqual(cur.rowcount, 1)
+        """check first_name gets updated"""
+        for tup in cur.__dict__['_rows']:
+            if 'silver' in tup:
+                self.assertIn("silver", tup)
 
 if __name__ == "__main__":
     unittest.main()
