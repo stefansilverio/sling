@@ -1,7 +1,7 @@
 $(function() {
     $('submit').click(function() {
         $.ajax({
-            url: '/borrow',
+            url: '/lend',
             data: $('form').serialize(),
             type: 'POST',
             success: function(response) {
