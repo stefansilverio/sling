@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/bo_le.css') }}">
+{% endblock %}
+
+{% block content %}
+
+  <div id="card-1" class="card card-rotating text-center flipped">
+
+    <div class="face front">
+    <div class='container'>
+        <div id="first">
+          <form action = "/borrow" method = "POST">
+             <p>Amount: <input type = "text" name = "$" /></p>
+             <p>Duration: <input type = "text" name = "Years" /></p>
+             <p>Interest:  <input type = "text" name = "Percent" /></p>
+             <p><input type = "submit" value = "submit" /></p>
+          </form>
+        </div>
+        <div id="second">
+          <a>Results Go Here</a>
+        </div>
+    </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block script %}
+  <script type="text/javascript" src="{{ url_for('static', filename='scripts/borrow.js') }}"></script>
+  {% endblock %}

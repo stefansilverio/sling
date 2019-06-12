@@ -17,14 +17,12 @@
       <!-- Content -->
       <div class="card-body">
           <h4 class="font-weight-bold mb-3"> {{ user_info.first_name }} {{ user_info.last_name }} </h4>
-          <p class="font-weight-bold blue-text"> {{ user_info.email }}</p>
-          <p class="font-weight-bold blue-text"> Amount Borrowed: {{ user_info.amount_burrowed }}</p>
+          <p class="font-weight-bold blue-text"> Email: {{ user_info.email }}</p>
+          <p class="font-weight-bold blue-text"> Amount Borrowed: {{ user_info.amount_borrowed }}</p>
           <p class="font-weight-bold blue-text"> Amount Lended: {{ user_info.amount_lent }}</p>
-          <a href=”/burrowers”><input type=”button” value=”call_flask_funtion”></a>
-          <a href=”/lenders”><input type=”button” value=”call_flask_funtion”></a>
-    <!-- Triggering button -->
+          <a href="/borrow"><input type="button" value="Find Burrowers"></a>
+          <a href="/lend"><input type="button" value="Find Lenders"></a>
       </div>
     </div>
   </div>
-    <!-- Front Side -->
 {% endblock %}

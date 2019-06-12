@@ -36,13 +36,19 @@ def landing():
             return render_template('index.html')
     return render_template('landing.html', user_info=match)
 
-@app.route('/burrow', methods=['GET'])
-def burrow():
-    return '<h1> Burrow, Here!</h1>'
+@app.route('/borrow', methods=['GET', 'POST'])
+def borrow():
+    """ find borrowers page """
+    borrowers = None
+    if request.method == 'POST':
+        params = request.form
+        print(params)
+        """ Stef Amazing Filter code here """
+    return render_template('borrow.html', borrowers=borrowers)
 
 @app.route('/lend', methods=['GET'])
 def lend():
-    return '<h1> Lend, Here!</h1>'
+    return render_template('lend.html')
 
 if __name__ == "__main__":
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
