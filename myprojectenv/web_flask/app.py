@@ -39,7 +39,7 @@ def landing():
 @app.route('/borrow', methods=['GET', 'POST'])
 def borrow():
     """ find borrowers page """
-    borrowers = None
+    borrower_list = []
     if request.method == 'POST':
         params = request.form
         interest = params['interest']
@@ -51,19 +51,19 @@ def borrow():
         print(borrower_list)
     return render_template('borrow.html', objs=borrower_list)
 
-@app.route('/lend', methods=['GET'])
+@app.route('/lend', methods=['GET', 'POST'])
 def lend():
-    lenders = None
+    lenders_list = []
     if request.method == 'POST':
         params = request.form
         interest = params['interest']
         objs = storage.query("Lender")
-        lender_list = []
+        lenders_list = []
         for obj in objs:
             if obj.__dict__['interest'] >= int(interest):
-                lender_list.append(obj)
-        print(lender_list)
-    return render_template('lend.html', objs=lender_list)
+                lenders_list.append(obj)
+        print(lenders_list)
+    return render_template('lend.html', objs=lenders_list)
 
 if __name__ == "__main__":
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
