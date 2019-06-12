@@ -11,14 +11,15 @@
     <div class='container'>
         <div id="first">
           <form action = "/borrow" method = "POST">
-             <p>Amount: <input type = "text" name = "$" /></p>
-             <p>Duration: <input type = "text" name = "Years" /></p>
-             <p>Interest:  <input type = "text" name = "Percent" /></p>
+             <p>Amount: <input type = "number" name="money" placeholder='$'/></p>
+             <p>Duration: <input type = "number" name="months" placeholder='Months' /></p>
+             <p>Interest:  <input type = "number" name="interest" placeholder='%' /></p>
              <p><input type = "submit" value = "submit" /></p>
           </form>
         </div>
         <div id="second">
-          <a>Results Go Here</a>
+          <h1>Burrowers</h1>
+          <p> _________________________________________________________________________ </p>
         </div>
     </div>
     </div>
