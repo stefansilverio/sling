@@ -42,9 +42,9 @@ def borrow():
     borrowers = None
     if request.method == 'POST':
         params = request.form
-        print(params)
-        """ Stef Amazing Filter code here """
-    return render_template('borrow.html', borrowers=borrowers)
+        interest = params['interest']
+        objs = storage.query("Borrower", 2)
+    return render_template('borrow.html', objs=objs)
 
 @app.route('/lend', methods=['GET'])
 def lend():
