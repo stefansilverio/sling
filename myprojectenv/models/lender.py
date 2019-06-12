@@ -17,3 +17,4 @@ class Lender(BaseModel, Base):
     interest = Column(Integer, nullable=False)
     email = Column(String(60), nullable=False)
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
+    user = relationship("User", back_populates="lender")

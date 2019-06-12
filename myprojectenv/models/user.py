@@ -23,3 +23,5 @@ class User(BaseModel, Base):
     last_name = Column(String(128), nullable=True)
     amount_borrowed = Column(Integer, nullable=True)
     amount_lent = Column(Integer, nullable=True)
+    lender = relationship("Lender", back_populates="user")
+    borrower = relationship("Borrower", back_populates="user")
