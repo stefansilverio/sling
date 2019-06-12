@@ -13,6 +13,7 @@ from models.base_model import Base
 from sqlalchemy import table, update
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker, scoped_session
+from collections import defaultdict
 
 class DBstorage:
     """
@@ -28,17 +29,24 @@ class DBstorage:
         self.__engine = create_engine('mysql+mysqldb://sling:s@localhost/sling', pool_pre_ping=True)
 
 
-    def all(self):
+    def all(self, obj=None):
         """
         return dictionary with all objs
         """
         dict_all = {}
-        for table in DBstorage.all_classes.values():
-            type_obj = self.__session.query(table)
-            for one_obj in type_obj:
-                cls_name = one_obj.__class__.__name__
-                k = one_obj.email
-                dict_all[k] = one_obj
+
+        if obj is None:
+            for table in DBstorage.all_classes.values():
+                type_obj = self.__session.query(table)
+                for each_obj in type_obj:
+                    k = each_obj.email
+                    dict_all[k] = each_obj
+        else:
+            one_obj = DBstorage.all_classes[obj]
+            type_obj = self.__session.query(one_obj)
+            for obj in type_obj:
+                k = obj.email
+                dict_all[k] = obj
         return(dict_all)
 
     def reload(self):
@@ -85,8 +93,9 @@ class DBstorage:
         """
         update User, Lender, and Borrower information
         """
-        if args[0].__name__ in DBstorage.all_classes.keys():
-            obj = DBstorage.all_classes[args[0].__name__]
+        class_name = args[0]
+        obj = DBstorage.all_classes[class_name]
+        if class_name is "User":
             user = self.__session.query(obj).filter(obj.id == args[1]).\
                    update({obj.last_name: kwargs.get('last_name'),
                            obj.first_name: kwargs.get('first_name'),
@@ -94,16 +103,32 @@ class DBstorage:
                            obj.amount_lent: kwargs.get('amount_lent'),
                            obj.password: kwargs.get('password'),
                            obj.email: kwargs.get('email')}, synchronize_session = False)
-            self.__session.commit()
+        elif class_name is "Borrower":
+            borrower = self.__session.query(obj).filter(obj.id == args[1]).\
+                       update({obj.loan_size: kwargs.get('loan_size'),
+                               obj.loan_duration: kwargs.get('loan_duration'),
+                               obj.interest: kwargs.get('interest'),
+                               obj.email: kwargs.get('email')}, synchronize_session = False)
+        else:
+            lender = self.__session.query(obj).filter(obj.id == args[1]).\
+                     update({obj.loan_size: kwargs.get('loan_size'),
+                             obj.loan_duration: kwargs.get('loan_duration'),
+                             obj.interest: kwargs.get('interest'),
+                             obj.email: kwargs.get('email')}, synchronize_session = False)
+        self.__session.commit()
 
-    def query(self, cls):
+    def query(self, cls, interest=None):
         """
         view all borrowers or lenders in db
+        option to sort by interest rate
         """
-        if cls in DBstorage.all_classes.keys():
-            table = DBstorage.all_classes[cls]
+        table = DBstorage.all_classes[cls]
+        if interest is None:
             all_objs = self.__session.query(table).all()
             return all_objs
+        else:
+            matches = self.__session.query(table).filter(table.interest==interest).all()
+            return matches
 
     def rollback(self):
         """
