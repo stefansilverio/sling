@@ -43,12 +43,27 @@ def borrow():
     if request.method == 'POST':
         params = request.form
         interest = params['interest']
-        objs = storage.query("Borrower", 2)
-    return render_template('borrow.html', objs=objs)
+        objs = storage.query("Borrower")
+        borrower_list = []
+        for obj in objs:
+            if obj.__dict__['interest'] <= int(interest):
+                borrower_list.append(obj)
+        print(borrower_list)
+    return render_template('borrow.html', objs=borrower_list)
 
 @app.route('/lend', methods=['GET'])
 def lend():
-    return render_template('lend.html')
+    lenders = None
+    if request.method == 'POST':
+        params = request.form
+        interest = params['interest']
+        objs = storage.query("Lender")
+        lender_list = []
+        for obj in objs:
+            if obj.__dict__['interest'] >= int(interest):
+                lender_list.append(obj)
+        print(lender_list)
+    return render_template('lend.html', objs=lender_list)
 
 if __name__ == "__main__":
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
