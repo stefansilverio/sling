@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/landing.css') }}">
+{% endblock %}
+
+{% block content %}
+
+  <div id="card-1" class="card card-rotating text-center flipped">
+
+    <!-- Front Side -->
+    <div class="face front">
+
+      <!-- Avatar -->
+      <div class="avatar-git mx-auto white"><img src="https://media.licdn.com/dms/image/C5603AQGJ_Tntgmf6dw/profile-displayphoto-shrink_800_800/0?e=1565827200&v=beta&t=ip7nSyEIsqo9RFeU8-2pq36IxNUtK1xPsFXiWv9bXlw" class="rounded-circle img" alt="Sample user image.">
+      </div>
+
+      <!-- Content -->
+      <div class="card-body">
+          <h4 class="font-weight-bold mb-3"> {{ user_info.first_name }} {{ user_info.last_name }} </h4>
+          <p class="font-weight-bold blue-text"> Email: {{ user_info.email }}</p>
+          <p class="font-weight-bold blue-text"> Amount Borrowed: {{ user_info.amount_borrowed }}</p>
+          <p class="font-weight-bold blue-text"> Amount Lended: {{ user_info.amount_lent }}</p>
+          <a href="/borrow"><input type="button" value="Find Burrowers"></a>
+          <a href="/lend"><input type="button" value="Find Lenders"></a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
