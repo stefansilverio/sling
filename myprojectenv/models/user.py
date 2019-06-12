@@ -21,5 +21,5 @@ class User(BaseModel, Base):
     password = Column(String(128), nullable=False)
     first_name = Column(String(128), nullable=True)
     last_name = Column(String(128), nullable=True)
-    amount_borrowed = Column(Integer, nullable=False)
-    amount_lent = Column(Integer, nullable=False)
+    amount_borrowed = Column(Integer, nullable=True)
+    amount_lent = Column(Integer, nullable=True)
