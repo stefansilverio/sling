@@ -65,12 +65,12 @@ class BaseModel:
                     kwargs[k] = self.__set_password(v)
             models.storage.update(*args, **kwargs)
 
-    def all(self):
+    def all(self, cls=None):
         """
         return dict of all objs in db
         currently printing dictionary
         """
-        obj = models.storage.all()
+        obj = models.storage.all(cls)
         return obj
 
     def save(self):
@@ -87,11 +87,12 @@ class BaseModel:
         cls = cls.__name__
         models.storage.delete(cls, str(u_id))
 
-    def query(self, table):
+    def query(self, table, interest=None):
         """
-        view all borrowers or lenders in db
+        view all borrowers or lenders ine db
+        option to sort by interest
         """
-        return models.storage.query(table)
+        return models.storage.query(table, interest)
 
     def close(self):
         """
