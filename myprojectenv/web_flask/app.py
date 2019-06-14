@@ -46,7 +46,7 @@ def borrow():
         objs = storage.query("Borrower")
         borrower_list = []
         for obj in objs:
-            if obj.__dict__['interest'] <= int(interest):
+            if obj.__dict__['interest'] >= int(interest):
                 borrower_list.append(obj)
         print(borrower_list)
     return render_template('borrow.html', objs=borrower_list)
@@ -60,7 +60,7 @@ def lend():
         objs = storage.query("Lender")
         lenders_list = []
         for obj in objs:
-            if obj.__dict__['interest'] >= int(interest):
+            if obj.__dict__['interest'] <= int(interest):
                 lenders_list.append(obj)
         print(lenders_list)
     return render_template('lend.html', objs=lenders_list)
