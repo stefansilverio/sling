@@ -23,7 +23,7 @@
           <UL id="search_results" style="list-style: none;">
         {% for borrower in objs|sort(attribute="loan_size") %}
       <LI>
-      <a><img src="/static/images/res_image.png" width="80" height="80" border="10" alt="profile pic"/><span>    {{ borrower.email }}: <B>  Rating: AA+</B></span></a>
+      <a><img src="/static/images/res_image.png" width="80" height="80" border="10" alt="profile pic"/><span>    {{ borrower.email }}: <B>  Rating: AA+ | Interests Rate Wanted: {{ borrower.interest }}%</B></span></a>
       </LI>
         {% endfor %}
     </UL>
